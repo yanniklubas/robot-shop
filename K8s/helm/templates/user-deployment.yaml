@@ -49,3 +49,9 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.secret }}
+      {{- if .Values.secret.enabled }}
+      imagePullSecrets:
+      - name: {{ .Values.secret.name }}
+      {{- end }}
+      {{- end }}

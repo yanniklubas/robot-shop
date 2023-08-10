@@ -1,0 +1,45 @@
+# Registry and rpository for Docker images
+# Default is docker/robotshop/image:latest
+image:
+  repo: saurabhjha1
+  version: 2.1.0-kubespray
+  pullPolicy: Always
+
+
+# Pod Security Policy
+psp:
+  enabled: false
+
+# For the mini ones minikube, minishift set to true
+nodeport: false
+
+# "special" Openshift. Set to true when deploying to any openshift flavour
+openshift: false
+
+ocCreateRoute: false
+
+cart: {}
+
+catalogue: {}
+
+dispatch: {}
+
+mongodb: {}
+
+mysql: {}
+
+payment:
+  # Alternative payment gateway URL
+  # Default is https://www.paypal.com
+  gateway: https://www.ibm.com
+
+ratings: {}
+shipping:   {}
+user: {}
+web: {}
+
+instana:
+  agent:
+    # {instan-svc}.{namespace}
+    host: instana-agent.instana-agent
+    port: 42699

@@ -26,17 +26,17 @@ spec:
         # it's Java it needs lots of memory
         resources:
           limits:
-            cpu: 200m
-            memory: 1000Mi
+            cpu: 1000m
+            memory: 1400Mi
           requests:
-            cpu: 100m
-            memory: 500Mi
+            cpu: 800m
+            memory: 1024Mi
         readinessProbe:
           httpGet:
             path: /health
             port: 8080
-          initialDelaySeconds: 5
-          periodSeconds: 5
+          initialDelaySeconds: 30
+          periodSeconds: 10
           failureThreshold: 30
           successThreshold: 1
       restartPolicy: Always
@@ -51,4 +51,10 @@ spec:
       {{- with .Values.shipping.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.secret }}
+      {{- if .Values.secret.enabled }}
+      imagePullSecrets:
+      - name: {{ .Values.secret.name }}
+      {{- end }}
       {{- end }}

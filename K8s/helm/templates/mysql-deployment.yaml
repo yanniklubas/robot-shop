@@ -29,11 +29,23 @@ spec:
         - containerPort: 3306
         resources:
           limits:
-            cpu: 200m
-            memory: 1024Mi
+            cpu: 600m
+            memory: 1400Mi
           requests:
-            cpu: 100m
-            memory: 700Mi
+            cpu: 500m
+            memory: 1200Mi
+        livenessProbe:
+          exec:
+            command: ["mysqladmin", "ping"]
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command: ["mysql", "-h", "127.0.0.1", "-e", "SELECT 1"]
+          initialDelaySeconds: 5
+          periodSeconds: 2
+          timeoutSeconds: 1
       restartPolicy: Always
       {{- with .Values.mysql.affinity }}
       affinity:

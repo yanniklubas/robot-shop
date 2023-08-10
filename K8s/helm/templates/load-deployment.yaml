@@ -5,7 +5,7 @@ metadata:
   labels:
     service: load
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       service: load
@@ -20,16 +20,23 @@ spec:
           - name: HOST
             value: "http://web:8080/"
           - name: NUM_CLIENTS
-            value: "15"
+            value: "10"
           - name: SILENT
             value: "1"
           - name: ERROR
             value: "0"
-        image: robotshop/rs-load:latest
+        image: {{ .Values.image.repo }}/rs-load:{{ .Values.image.version }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         resources:
           limits:
-            cpu: 400m
-            memory: 400Mi
+            cpu: 600m
+            memory: 300Mi
           requests:
-            cpu: 200m
-            memory: 256Mi
+            cpu: 500m
+            memory: 200Mi
+      {{- if .Values.secret }}
+      {{- if .Values.secret.enabled }}
+      imagePullSecrets:
+      - name: {{ .Values.secret.name }}
+      {{- end }}
+      {{- end }}
