@@ -9,7 +9,8 @@ public interface CityRepository extends CrudRepository<City, Long> {
     List<City> findByCode(String code);
 
     @Query(
-        value = "select c from City c where c.code = ?1 and c.city like ?2% LIMIT 10"
+        value = "select * from cities c where c.country_code = ?1 and c.city like ?2% LIMIT 10",
+        nativeQuery = true
     )
     List<City> match(String code, String text);
 

@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -93,14 +94,17 @@ public class Controller {
         }
 
         List<City> cities = cityrepo.match(code, text);
+        // PageRequest pageRequest = PageRequest.of(0, 10); // first page, 10 results
+        // Page<City> citiesPage = cityrepo.match(code, text, pageRequest);
+        // List<City> cities = citiesPage.getContent();
         /*
          * This is a dirty hack to limit the result size
          * I'm sure there is a more spring boot way to do this
          * TODO - neater
          */
-        if (cities.size() > 10) {
-            cities = cities.subList(0, 9);
-        }
+        // if (cities.size() > 10) {
+        //     cities = cities.subList(0, 9);
+        // }
 
         return cities;
     }

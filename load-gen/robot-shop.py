@@ -1,12 +1,16 @@
 import os
 import random
 
-from locust import HttpUser, task, between
+from locust import HttpUser, task, between, constant
 from random import choice
 from random import randint
 
 class UserBehavior(HttpUser):
-    wait_time = between(2, 10)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.client.timeout = 1
+
+    wait_time = constant(1) #between(2, 10)
 
     # source: https://tools.tracemyip.org/search--ip/list
     fake_ip_addresses = [
