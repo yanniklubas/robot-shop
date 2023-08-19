@@ -17,6 +17,13 @@ spec:
       {{ if .Values.psp.enabled }}
       serviceAccountName: robot-shop
       {{ end }}
+      initContainers: # Adding init container here
+      - name: check-rabbitmq
+        image: busybox:1.28 # or any suitable image containing curl or netcat
+        command:
+          - 'sh'
+          - '-c'
+          - 'until nc -z rabbitmq 5672; do echo waiting for rabbitmq; sleep 2; done'
       containers:
       - name: dispatch
         image: {{ .Values.image.repo }}/rs-dispatch:{{ .Values.image.version }}
