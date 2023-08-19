@@ -31,19 +31,26 @@ spec:
           requests:
             cpu: 100m
             memory: 256Mi
-        livenessProbe: 
-          tcpSocket:
-            port: 5672
+        livenessProbe:
+          exec:
+            command:
+            - rabbitmq-diagnostics
+            - -q
+            - ping
           initialDelaySeconds: 30
-          periodSeconds: 10
+          periodSeconds: 150
           failureThreshold: 3
-        readinessProbe: 
-          tcpSocket:
-            port: 5672
+          timeoutSeconds: 120
+        readinessProbe:
+          exec:
+            command:
+            - rabbitmq-diagnostics
+            - -q
+            - ping
           initialDelaySeconds: 30
-          periodSeconds: 10
-          failureThreshold: 30
-          successThreshold: 1
+          periodSeconds: 160
+          failureThreshold: 3
+          timeoutSeconds: 120
       restartPolicy: Always
       {{- with .Values.rabbitmq.affinity }}
       affinity:
