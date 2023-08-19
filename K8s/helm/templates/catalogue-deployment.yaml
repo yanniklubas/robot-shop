@@ -46,6 +46,15 @@ spec:
           requests:
             cpu: 100m
             memory: 50Mi
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - 'curl http://localhost:8080/health | grep -q "{\"app\":\"OK\",\"mongo\":true}"'
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          failureThreshold: 3
       restartPolicy: Always
       {{- with .Values.catalogue.affinity }}
       affinity:
