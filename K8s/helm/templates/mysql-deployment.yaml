@@ -42,9 +42,12 @@ spec:
           timeoutSeconds: 5
         readinessProbe:
           exec:
-            command: ["mysql", "-h", "127.0.0.1", "-e", "SELECT 1"]
-          initialDelaySeconds: 5
-          periodSeconds: 2
+             command:
+             - sh
+             - -c
+             - "mysql -h 127.0.0.1 -e 'SELECT 1 FROM information_schema.tables WHERE table_schema = \"cities\" AND table_name = \"cities\" LIMIT 1;'"
+          initialDelaySeconds: 60
+          periodSeconds: 30
           timeoutSeconds: 1
       restartPolicy: Always
       {{- with .Values.mysql.affinity }}

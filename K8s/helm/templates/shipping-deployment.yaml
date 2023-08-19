@@ -14,6 +14,17 @@ spec:
       labels:
         service: shipping
     spec:
+      initContainers:
+      - name: wait-for-mysql
+        image: mysql:5.7
+        command:
+          - sh
+          - -c
+          - |
+            until mysql -h mysql -e "SELECT 1 FROM information_schema.tables WHERE table_schema = 'cities' AND table_name = 'cities' LIMIT 1;" ; do
+              echo 'waiting for cities.cities table';
+              sleep 2;
+            done
       {{ if .Values.psp.enabled }}
       serviceAccountName: robot-shop
       {{ end }}
@@ -38,6 +49,15 @@ spec:
           initialDelaySeconds: 30
           periodSeconds: 10
           failureThreshold: 30
+          successThreshold: 1
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
           successThreshold: 1
       restartPolicy: Always
       {{- with .Values.shipping.affinity }}

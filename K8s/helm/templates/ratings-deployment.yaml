@@ -14,6 +14,17 @@ spec:
       labels:
         service: ratings
     spec:
+      initContainers:
+      - name: wait-for-mysql
+        image: mysql:5.7
+        command:
+          - sh
+          - -c
+          - |
+            until mysql -h mysql -e "SELECT 1 FROM information_schema.tables WHERE table_schema = 'ratings' AND table_name = 'ratings' LIMIT 1;" ; do
+              echo 'waiting for ratings.ratings table';
+              sleep 2;
+            done
       {{ if .Values.psp.enabled }}
       serviceAccountName: robot-shop
       {{ end }}

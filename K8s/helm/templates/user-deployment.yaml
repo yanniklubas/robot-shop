@@ -17,6 +17,17 @@ spec:
       {{ if .Values.psp.enabled }}
       serviceAccountName: robot-shop
       {{ end }}
+      initContainers:
+      - name: check-mongodb
+        image: mongoclient/mongoclient:latest
+        command:
+        - sh
+        - -c
+        - |
+          until mongo --host mongodb:27017 --eval "db = db.getSiblingDB('users'); if (db.stats().ok == 0) { quit(1); }"; do
+            echo 'waiting for mongodb'
+            sleep 5
+          done
       containers:
       - name: user
         image: {{ .Values.image.repo }}/rs-user:{{ .Values.image.version }}

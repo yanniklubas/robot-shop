@@ -17,6 +17,17 @@ spec:
       {{ if .Values.psp.enabled }}
       serviceAccountName: robot-shop
       {{ end }}
+      initContainers:
+      - name: check-shipping
+        image: curlimages/curl:latest # Make sure the image has curl
+        command: ['sh', '-c']
+        args:
+          - |
+            until curl -XGET "http://shipping:8080/health" -f | grep -i "ok"; do
+              echo 'waiting for shipping-service'
+              sleep 5
+            done
+
       containers:
       - name: web
         image: {{ .Values.image.repo }}/rs-web:{{ .Values.image.version }}
