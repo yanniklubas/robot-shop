@@ -31,7 +31,8 @@ mysql: {}
 payment:
   # Alternative payment gateway URL
   # Default is https://www.paypal.com
-  gateway: https://www.ibm.com
+  # http://web:8080/nginx_status
+  gateway: https://www.ibm.com/us-en
 
 ratings: {}
 shipping:   {}

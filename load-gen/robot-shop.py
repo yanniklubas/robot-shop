@@ -88,8 +88,10 @@ class UserBehavior(HttpUser):
         cart = self.client.post('/api/shipping/confirm/{}'.format(uniqueid), json=shipping, headers={'x-forwarded-for': fake_ip}).json()
         print('Final cart {}'.format(cart))
 
-        order = self.client.post('/api/payment/pay/{}'.format(uniqueid), json=cart, headers={'x-forwarded-for': fake_ip}).json()
-        print('Order {}'.format(order))
+        # assuming 10% conversion rate of customers
+        if random.random() < 0.1:
+            order = self.client.post('/api/payment/pay/{}'.format(uniqueid), json=cart, headers={'x-forwarded-for': fake_ip}).json()
+            print('Order {}'.format(order))
 
     @task
     def error(self):
