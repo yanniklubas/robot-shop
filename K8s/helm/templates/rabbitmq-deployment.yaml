@@ -1,66 +1,99 @@
-apiVersion: apps/v1
-kind: Deployment
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: rabbitmq
+#   labels:
+#     service: rabbitmq
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       service: rabbitmq
+#   template:
+#     metadata:
+#       labels:
+#         service: rabbitmq
+#     spec:
+#       {{ if .Values.psp.enabled }}
+#       serviceAccountName: robot-shop
+#       {{ end }}
+#       containers:
+#       - name: rabbitmq
+#         image: rabbitmq:3.7-management-alpine
+#         imagePullPolicy: {{ .Values.image.pullPolicy }}
+#         ports:
+#         - containerPort: 5672
+#         - containerPort: 15672
+#         resources:
+#           limits:
+#             cpu: 200m
+#             memory: 512Mi
+#           requests:
+#             cpu: 100m
+#             memory: 256Mi
+#         livenessProbe:
+#           exec:
+#             command:
+#             - rabbitmq-diagnostics
+#             - -q
+#             - ping
+#           initialDelaySeconds: 30
+#           periodSeconds: 150
+#           failureThreshold: 3
+#           timeoutSeconds: 120
+#         readinessProbe:
+#           exec:
+#             command:
+#             - rabbitmq-diagnostics
+#             - -q
+#             - ping
+#           initialDelaySeconds: 30
+#           periodSeconds: 160
+#           failureThreshold: 3
+#           timeoutSeconds: 120
+#       restartPolicy: Always
+#       {{- with .Values.rabbitmq.affinity }}
+#       affinity:
+#         {{- toYaml . | nindent 8 }}
+#       {{- end }}
+#       {{- with .Values.rabbitmq.nodeSelector }}
+#       nodeSelector:
+#         {{- toYaml . | nindent 8 }}
+#       {{- end }}
+#       {{- with .Values.rabbitmq.tolerations }}
+#       tolerations:
+#         {{- toYaml . | nindent 8 }}
+#       {{- end }}
+
+apiVersion: v1
+data:
+  default_user.conf: ZGVmYXVsdF91c2VyID0gdXNlcl9yb2JvdC1zaG9wCmRlZmF1bHRfcGFzcyA9IHVzZXJfcm9ib3Qtc2hvcAo=
+  host: dmF1bHQtZGVmYXVsdC11c2VyLmRlZmF1bHQuc3Zj
+  password: dXNlcl9yb2JvdC1zaG9w
+  port: NTY3Mg==
+  provider: cmFiYml0bXE=
+  type: cmFiYml0bXE=
+  username: dXNlcl9yb2JvdC1zaG9w
+kind: Secret
+metadata:
+  name: rabbitmq-secret
+type: Opaque
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
 metadata:
   name: rabbitmq
   labels:
     service: rabbitmq
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      service: rabbitmq
-  template:
-    metadata:
-      labels:
-        service: rabbitmq
-    spec:
-      {{ if .Values.psp.enabled }}
-      serviceAccountName: robot-shop
-      {{ end }}
-      containers:
-      - name: rabbitmq
-        image: rabbitmq:3.7-management-alpine
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        ports:
-        - containerPort: 5672
-        - containerPort: 15672
-        resources:
-          limits:
-            cpu: 200m
-            memory: 512Mi
-          requests:
-            cpu: 100m
-            memory: 256Mi
-        livenessProbe:
-          exec:
-            command:
-            - rabbitmq-diagnostics
-            - -q
-            - ping
-          initialDelaySeconds: 30
-          periodSeconds: 150
-          failureThreshold: 3
-          timeoutSeconds: 120
-        readinessProbe:
-          exec:
-            command:
-            - rabbitmq-diagnostics
-            - -q
-            - ping
-          initialDelaySeconds: 30
-          periodSeconds: 160
-          failureThreshold: 3
-          timeoutSeconds: 120
-      restartPolicy: Always
-      {{- with .Values.rabbitmq.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.rabbitmq.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.rabbitmq.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+  replicas: 2
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 400m
+      memory: 256Mi
+  secretBackend:
+    externalSecret: 
+      name: rabbitmq-secret

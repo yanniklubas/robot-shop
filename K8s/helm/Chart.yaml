@@ -3,4 +3,7 @@ name: robot-shop
 version: 1.1.0
 home: https://github.com/instana/robot-shop
 description: Sample micoservices application
-
+dependencies:
+  - name: rabbitmq-cluster-operator
+    version: "3.6.6" # 
+    repository: "https://charts.bitnami.com/bitnami"

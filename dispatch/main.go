@@ -8,6 +8,7 @@ import (
 	"os"
 	"strconv"
 	"time"
+	"net/http"
 
 	"github.com/instana/go-sensor"
 	ot "github.com/opentracing/opentracing-go"
@@ -27,6 +28,8 @@ var (
 	rabbitReady      chan bool
 	errorPercent     int
 
+	isRabbitReady bool
+
 	dataCenters = []string{
 		"asia-northeast2",
 		"asia-south1",
@@ -35,6 +38,7 @@ var (
 		"us-west1",
 	}
 )
+
 
 func connectToRabbitMQ(uri string) *amqp.Connection {
 	for {
@@ -82,6 +86,7 @@ func rabbitConnector(uri string) {
 
 		// signal ready
 		rabbitReady <- true
+		isRabbitReady = true
 	}
 }
 
@@ -164,6 +169,17 @@ func processSale(parentSpan ot.Span) {
 	time.Sleep(time.Duration(42+rand.Int63n(42)) * time.Millisecond)
 }
 
+func healthCheck(w http.ResponseWriter, r *http.Request) {
+	if isRabbitReady {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprint(w, "OK")
+	} else {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, "Service Unavailable")
+	}
+}
+
+
 func main() {
 	rand.Seed(time.Now().Unix())
 
@@ -180,7 +196,8 @@ func main() {
 	if !ok {
 		amqpHost = "rabbitmq"
 	}
-	amqpUri = fmt.Sprintf("amqp://guest:guest@%s:5672/", amqpHost)
+	// amqpUri = fmt.Sprintf("amqp://guest:guest@%s:5672/", amqpHost)
+	amqpUri = fmt.Sprintf("amqp://user_robot-shop:user_robot-shop@%s:5672/", amqpHost)
 
 	// get error threshold from environment
 	errorPercent = 0
@@ -208,6 +225,10 @@ func main() {
 	go rabbitConnector(amqpUri)
 
 	rabbitCloseError <- amqp.ErrClosed
+
+	http.HandleFunc("/mqready", healthCheck)
+
+	go http.ListenAndServe(":8080", nil)
 
 	go func() {
 		for {

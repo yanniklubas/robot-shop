@@ -9,5 +9,8 @@ if [ "$1" = "start" ] ; then
     helm install "${ROBOTSHOP_NAMESPACE_PROJECT_NAME}" --namespace "${ROBOTSHOP_NAMESPACE_PROJECT_NAME}"  --create-namespace ${SCRIPT_DIR}/../helm  --values ${SCRIPT_DIR}/rs.yaml
 
 elif [ "$1" = "stop" ] ; then
+    kubectl delete rabbitmqclusters --all -n robot-shop
+    kubectl delete svc -n robot-shop rabbitmq rabbitmq-nodes
+    kubectl delete statefulset -n robot-shop rabbitmq-server
     helm uninstall "${ROBOTSHOP_NAMESPACE_PROJECT_NAME}" --namespace "${ROBOTSHOP_NAMESPACE_PROJECT_NAME}" 
 fi

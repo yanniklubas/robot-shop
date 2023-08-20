@@ -20,6 +20,14 @@ spec:
       {{ if .Values.psp.enabled }}
       serviceAccountName: robot-shop
       {{ end }}
+      initContainers:
+      - name: check-dispatch
+        image: busybox:1.28 # or another suitable image containing netcat or curl
+        command:
+          - 'sh'
+          - '-c'
+          - 'until nc -z dispatch 8080; do echo waiting for dispatch; sleep 2; done' # Replace with the correct hostname and port if different
+      
       containers:
       - name: payment
         image: {{ .Values.image.repo }}/rs-payment:{{ .Values.image.version }}

@@ -14,7 +14,8 @@ class Publisher:
         self._params = pika.connection.ConnectionParameters(
             host=self.HOST,
             virtual_host=self.VIRTUAL_HOST,
-            credentials=pika.credentials.PlainCredentials('guest', 'guest'))
+            credentials=pika.credentials.PlainCredentials('user_robot-shop', 'user_robot-shop'))
+            # credentials=pika.credentials.PlainCredentials('guest', 'guest'))
         self._conn = None
         self._channel = None
 
