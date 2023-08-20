@@ -1,0 +1,299 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: web-throttle-v6
+  namespace: robot-shop
+spec:
+  scaleTargetRef:
+    name: web
+    kind: Deployment
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress:  http://prom-stack-prometheus-server.kube-system.svc:80
+        query: (sum(rate(container_cpu_cfs_throttled_seconds_total{container='web', namespace='robot-shop'}[5m]))) /(sum(rate(container_cpu_usage_seconds_total{container='web', namespace='robot-shop'}[5m])) + sum(rate(container_cpu_cfs_throttled_seconds_total{container='web', namespace='robot-shop'}[5m]))) * 100
+        threshold: "10"
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "99"
+  # multiply the number by 1000 as metrics are reports in millis in kubernetes                     
+  minReplicaCount: 1
+  maxReplicaCount: 200
+  pollingInterval:  120                               
+  cooldownPeriod:   120 
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: cart-throttle-v6
+  namespace: robot-shop
+spec:
+  scaleTargetRef:
+    name: cart
+    kind: Deployment
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prom-stack-prometheus-server.kube-system.svc:80
+        metricType: Value
+        query: (sum(rate(container_cpu_cfs_throttled_seconds_total{container='cart', namespace='robot-shop'}[5m]))) /(sum(rate(container_cpu_usage_seconds_total{container='cart', namespace='robot-shop'}[5m])) + sum(rate(container_cpu_cfs_throttled_seconds_total{container='cart', namespace='robot-shop'}[5m]))) * 100
+        threshold: "10"
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "96"
+  minReplicaCount: 1
+  maxReplicaCount: 200
+  pollingInterval:  120                               
+  cooldownPeriod:   120 
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: catalogue-throttle-v6
+  namespace: robot-shop
+spec:
+  scaleTargetRef:
+    name: catalogue
+    kind: Deployment
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prom-stack-prometheus-server.kube-system.svc:80
+        metricType: Value
+        query: (sum(rate(container_cpu_cfs_throttled_seconds_total{container='catalogue', namespace='robot-shop'}[5m]))) /(sum(rate(container_cpu_usage_seconds_total{container='catalogue', namespace='robot-shop'}[5m])) + sum(rate(container_cpu_cfs_throttled_seconds_total{container='catalogue', namespace='robot-shop'}[5m]))) * 100
+        threshold: "10"
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "96"
+  minReplicaCount: 1
+  maxReplicaCount: 200
+  pollingInterval:  120                               
+  cooldownPeriod:   120 
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: mongodb-throttle-v6
+  namespace: robot-shop
+spec:
+  scaleTargetRef:
+    name: mongodb
+    kind: Deployment
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prom-stack-prometheus-server.kube-system.svc:80
+        metricType: Value
+        query: (sum(rate(container_cpu_cfs_throttled_seconds_total{container='mongodb', namespace='robot-shop'}[5m]))) /(sum(rate(container_cpu_usage_seconds_total{container='mongodb', namespace='robot-shop'}[5m])) + sum(rate(container_cpu_cfs_throttled_seconds_total{container='mongodb', namespace='robot-shop'}[5m]))) * 100
+        threshold: "10"
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "96"
+  minReplicaCount: 1
+  maxReplicaCount: 200
+  pollingInterval:  120                               
+  cooldownPeriod:   120 
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: mysql-throttle-v6
+  namespace: robot-shop
+spec:
+  scaleTargetRef:
+    name: mysql
+    kind: Deployment
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prom-stack-prometheus-server.kube-system.svc:80
+        metricType: Value
+        query: (sum(rate(container_cpu_cfs_throttled_seconds_total{container='mysql', namespace='robot-shop'}[5m]))) /(sum(rate(container_cpu_usage_seconds_total{container='mysql', namespace='robot-shop'}[5m])) + sum(rate(container_cpu_cfs_throttled_seconds_total{container='mysql', namespace='robot-shop'}[5m]))) * 100
+        threshold: "10"
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "96"
+  minReplicaCount: 1
+  maxReplicaCount: 400
+  pollingInterval:  300                               
+  cooldownPeriod:   300 
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: dispatch-throttle-v6
+  namespace: robot-shop
+spec:
+  scaleTargetRef:
+    name: dispatch
+    kind: Deployment
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prom-stack-prometheus-server.kube-system.svc:80
+        metricType: Value
+        query: (sum(rate(container_cpu_cfs_throttled_seconds_total{container='dispatch', namespace='robot-shop'}[5m]))) /(sum(rate(container_cpu_usage_seconds_total{container='dispatch', namespace='robot-shop'}[5m])) + sum(rate(container_cpu_cfs_throttled_seconds_total{container='dispatch', namespace='robot-shop'}[5m]))) * 100
+        threshold: "10"
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "96"
+  minReplicaCount: 1
+  maxReplicaCount: 200
+  pollingInterval:  120                               
+  cooldownPeriod:   120 
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: payment-throttle-v6
+  namespace: robot-shop
+spec:
+  scaleTargetRef:
+    name: payment
+    kind: Deployment
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prom-stack-prometheus-server.kube-system.svc:80
+        metricType: Value
+        query: (sum(rate(container_cpu_cfs_throttled_seconds_total{container='payment', namespace='robot-shop'}[5m]))) /(sum(rate(container_cpu_usage_seconds_total{container='payment', namespace='robot-shop'}[5m])) + sum(rate(container_cpu_cfs_throttled_seconds_total{container='payment', namespace='robot-shop'}[5m]))) * 100
+        threshold: "10"
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "96"
+  minReplicaCount: 1
+  maxReplicaCount: 200
+  pollingInterval:  120                               
+  cooldownPeriod:   120 
+---
+# apiVersion: keda.sh/v1alpha1
+# kind: ScaledObject
+# metadata:
+#   name: rabbitmq-throttle-v6
+#   namespace: robot-shop
+# spec:
+#   scaleTargetRef:
+#     name: rabbitmq-server
+#     kind: statefulset
+#   triggers:
+#     - type: prometheus
+#       metadata:
+#         serverAddress: http://prom-stack-prometheus-server.kube-system.svc:80
+#         metricType: Value
+#         query: (sum(rate(container_cpu_cfs_throttled_seconds_total{container='rabbitmq', namespace='robot-shop'}[5m]))) /(sum(rate(container_cpu_usage_seconds_total{container='rabbitmq', namespace='robot-shop'}[5m])) + sum(rate(container_cpu_cfs_throttled_seconds_total{container='rabbitmq', namespace='robot-shop'}[5m]))) * 100
+#         threshold: "10"
+#     - type: cpu
+#       metadata:
+#         type: Utilization
+#         value: "96"
+#   minReplicaCount: 1
+#   maxReplicaCount: 200
+#   pollingInterval:  300                               
+#   cooldownPeriod:   300 
+# ---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: ratings-throttle-v6
+  namespace: robot-shop
+spec:
+  scaleTargetRef:
+    name: ratings
+    kind: Deployment
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prom-stack-prometheus-server.kube-system.svc:80
+        metricType: Value
+        query: (sum(rate(container_cpu_cfs_throttled_seconds_total{container='ratings', namespace='robot-shop'}[5m]))) /(sum(rate(container_cpu_usage_seconds_total{container='ratings', namespace='robot-shop'}[5m])) + sum(rate(container_cpu_cfs_throttled_seconds_total{container='ratings', namespace='robot-shop'}[5m]))) * 100
+        threshold: "10"
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "96"
+  minReplicaCount: 1
+  maxReplicaCount: 200
+  pollingInterval:  120                               
+  cooldownPeriod:   120 
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: shipping-throttle-v6
+  namespace: robot-shop
+spec:
+  scaleTargetRef:
+    name: shipping
+    kind: Deployment
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prom-stack-prometheus-server.kube-system.svc:80
+        metricType: Value
+        query: (sum(rate(container_cpu_cfs_throttled_seconds_total{container='shipping', namespace='robot-shop'}[5m]))) /(sum(rate(container_cpu_usage_seconds_total{container='shipping', namespace='robot-shop'}[5m])) + sum(rate(container_cpu_cfs_throttled_seconds_total{container='shipping', namespace='robot-shop'}[5m]))) * 100
+        threshold: "10"
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "96"
+  minReplicaCount: 1
+  maxReplicaCount: 200
+  pollingInterval:  120                               
+  cooldownPeriod:   120 
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: user-throttle-v6
+  namespace: robot-shop
+spec:
+  scaleTargetRef:
+    name: user
+    kind: Deployment
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prom-stack-prometheus-server.kube-system.svc:80
+        metricType: Value
+        query: (sum(rate(container_cpu_cfs_throttled_seconds_total{container='user', namespace='robot-shop'}[5m]))) /(sum(rate(container_cpu_usage_seconds_total{container='user', namespace='robot-shop'}[5m])) + sum(rate(container_cpu_cfs_throttled_seconds_total{container='user', namespace='robot-shop'}[5m]))) * 100
+        threshold: "10"
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "96"
+  minReplicaCount: 1
+  maxReplicaCount: 200
+  pollingInterval:  120                               
+  cooldownPeriod:   120 
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: redis-throttle-v6
+  namespace: robot-shop
+spec:
+  scaleTargetRef:
+    name: redis
+    kind: statefulset
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prom-stack-prometheus-server.kube-system.svc:80
+        metricType: Value
+        query: (sum(rate(container_cpu_cfs_throttled_seconds_total{container='redis', namespace='robot-shop'}[5m]))) /(sum(rate(container_cpu_usage_seconds_total{container='redis', namespace='robot-shop'}[5m])) + sum(rate(container_cpu_cfs_throttled_seconds_total{container='redis', namespace='robot-shop'}[5m]))) * 100
+        threshold: "10"
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "96"
+  minReplicaCount: 1
+  maxReplicaCount: 200
+  pollingInterval:  30                               
+  cooldownPeriod:   120
