@@ -146,6 +146,7 @@ Add the line **kube_apiserver_enable_aggregator_routing: true** to this file
 $ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 $ helm repo add kedacore https://kedacore.github.io/charts
 $ helm repo update
+$ helm install prom-stack prometheus-community/prometheus -n kube-system 
 $ helm install prom-adapter prometheus-community/prometheus-adapter -n kube-system --set prometheus.url=http://prom-stack-prometheus-server.kube-system.svc:80
 $ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 $ helm install keda kedacore/keda --namespace keda --create-namespace
