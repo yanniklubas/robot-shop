@@ -134,6 +134,7 @@ $ helm repo add kedacore https://kedacore.github.io/charts
 $ helm repo update
 $ helm install prom-adapter prometheus-community/prometheus-adapter -n kube-system --set prometheus.url=http://prom-stack-prometheus-server.kube-system.svc:80
 $ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+$ helm install keda kedacore/keda --namespace keda --create-namespace
 ```
 
 ## modify the metric-server to allow insecure-tls
