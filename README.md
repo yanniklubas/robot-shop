@@ -128,6 +128,20 @@ $ curl http://<host>:8080/api/payment/metrics
 
 
 # USE KEDA HPA
+
+
+## enable kuberenetes api aggregation
+
+* Option1: SSH into the Master Node: Connect to the master node where the Kubernetes API server is running.
+Edit the API Server Manifest: Locate and open the API server manifest file, usually found at /etc/kubernetes/manifests/kube-apiserver.yaml.
+Add the Aggregation Layer Configuration: Find the command section and add the following flags: **- --enable-aggregator-routing=true**
+
+
+* Options 2: Navigate to your inventory directory for the cluster, something like inventory/mycluster/group_vars/.
+Open or create the k8s-cluster/k8s-cluster.yml file within this directory.
+Add the line **kube_apiserver_enable_aggregator_routing: true** to this file
+
+## Install Keda
 ```shell
 $ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 $ helm repo add kedacore https://kedacore.github.io/charts
@@ -144,17 +158,6 @@ $ kubectl edit deployment metrics-server -n kube-system
 Add args **- --kubelet-insecure-tls**
 and exit.
 
-
-## enable kuberenetes api aggregation
-
-* Option1: SSH into the Master Node: Connect to the master node where the Kubernetes API server is running.
-Edit the API Server Manifest: Locate and open the API server manifest file, usually found at /etc/kubernetes/manifests/kube-apiserver.yaml.
-Add the Aggregation Layer Configuration: Find the command section and add the following flags: **- --enable-aggregator-routing=true**
-
-
-* Options 2: Navigate to your inventory directory for the cluster, something like inventory/mycluster/group_vars/.
-Open or create the k8s-cluster/k8s-cluster.yml file within this directory.
-Add the line **kube_apiserver_enable_aggregator_routing: true** to this file
 
 ## deploy HPA policies
 assumes that the app is installed in robot-shop namespace.
