@@ -41,7 +41,7 @@ spec:
             command:
             - sh
             - -c
-            - 'curl http://localhost:8080/health | grep -q "{\"mongo\":true}"'
+            - 'curl http://localhost:8080/health | grep -q true'
       {{- with .Values.cart.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

@@ -86,7 +86,7 @@ metadata:
   labels:
     service: rabbitmq
 spec:
-  replicas: 2
+  replicas: 1
   resources:
     limits:
       cpu: 500m
