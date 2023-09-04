@@ -13,6 +13,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const pino = require('pino');
 const expPino = require('express-pino-logger');
+const fs = require('fs');
 
 const logger = pino({
     level: 'info',
@@ -29,6 +30,7 @@ var collection;
 var mongoConnected = false;
 
 const app = express();
+
 
 app.use(expLogger);
 
@@ -54,6 +56,18 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+
+// fault injection code that does not cause liveness probe to fail
+app.use((req, res, next) => {
+    if (req.path !== '/health' && fs.existsSync('/tmp/faults.txt')) {
+        setTimeout(() => {
+            res.status(503).send('Fault injection triggered');
+        }, 500);
+    } else {
+        next();
+    }
+});
 
 app.get('/health', (req, res) => {
     var stat = {

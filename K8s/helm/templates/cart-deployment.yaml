@@ -36,6 +36,12 @@ spec:
           requests:
             cpu: 50m
             memory: 50Mi
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - 'curl http://localhost:8080/health | grep -q "{\"mongo\":true}"'
       {{- with .Values.cart.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

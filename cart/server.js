@@ -13,6 +13,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const pino = require('pino');
 const expPino = require('express-pino-logger');
+const fs = require('fs');
 // Prometheus
 const promClient = require('prom-client');
 const Registry = promClient.Registry;
@@ -73,6 +74,16 @@ app.get('/health', (req, res) => {
     res.json(stat);
 });
 
+// fault injection code that does not cause liveness probe to fail
+app.use((req, res, next) => {
+    if (req.path !== '/health' && fs.existsSync('/tmp/faults.txt')) {
+        setTimeout(() => {
+            res.status(503).send('Fault injection triggered');
+        }, 500);
+    } else {
+        next();
+    }
+});
 // Prometheus
 app.get('/metrics', (req, res) => {
     res.header('Content-Type', 'text/plain');

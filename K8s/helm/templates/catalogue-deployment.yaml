@@ -51,7 +51,7 @@ spec:
             command:
             - sh
             - -c
-            - 'curl http://localhost:8080/health | grep -q "{\"app\":\"OK\",\"mongo\":true}"'
+            - 'curl http://localhost:8080/health | grep -q "{\"mongo\":true}"'
           initialDelaySeconds: 15
           periodSeconds: 10
           failureThreshold: 3
