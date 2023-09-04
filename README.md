@@ -128,18 +128,6 @@ $ curl http://<host>:8080/api/payment/metrics
 
 
 # USE KEDA HPA
-```shell
-$ helm install prom-adapter prometheus-community/prometheus-adapter -n kube-system
-$ helm install prom-adapter prometheus-community/prometheus-adapter -n kube-system --set prometheus.url=http://prom-stack-prometheus-server.kube-system.svc:80
-$ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
-```
-
-## modify the metric-server to allow insecure-tls
-```shell 
-$ kubectl edit deployment metrics-server -n kube-system
-```
-Add args **- --kubelet-insecure-tls**
-and exit.
 
 
 ## enable kuberenetes api aggregation
@@ -152,6 +140,25 @@ Add the Aggregation Layer Configuration: Find the command section and add the fo
 * Options 2: Navigate to your inventory directory for the cluster, something like inventory/mycluster/group_vars/.
 Open or create the k8s-cluster/k8s-cluster.yml file within this directory.
 Add the line **kube_apiserver_enable_aggregator_routing: true** to this file
+
+## Install Keda
+```shell
+$ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+$ helm repo add kedacore https://kedacore.github.io/charts
+$ helm repo update
+$ helm install prom-stack prometheus-community/prometheus -n kube-system 
+$ helm install prom-adapter prometheus-community/prometheus-adapter -n kube-system --set prometheus.url=http://prom-stack-prometheus-server.kube-system.svc:80
+$ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+$ helm install keda kedacore/keda --namespace keda --create-namespace
+```
+
+## modify the metric-server to allow insecure-tls
+```shell 
+$ kubectl edit deployment metrics-server -n kube-system
+```
+Add args **- --kubelet-insecure-tls**
+and exit.
+
 
 ## deploy HPA policies
 assumes that the app is installed in robot-shop namespace.
