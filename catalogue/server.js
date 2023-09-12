@@ -165,14 +165,37 @@ app.get('/search/:text', (req, res) => {
     }
 });
 
-// set up Mongo
+// // set up Mongo
+// function mongoConnect() {
+//     return new Promise((resolve, reject) => {
+//         var mongoURL = process.env.MONGO_URL || 'mongodb://mongodb:27017/catalogue';
+//         mongoClient.connect(mongoURL, (error, client) => {
+//             if(error) {
+//                 reject(error);
+//             } else {
+//                 db = client.db('catalogue');
+//                 collection = db.collection('products');
+//                 resolve('connected');
+//             }
+//         });
+//     });
+// }
+
+let failCount = 0;
+
 function mongoConnect() {
     return new Promise((resolve, reject) => {
         var mongoURL = process.env.MONGO_URL || 'mongodb://mongodb:27017/catalogue';
-        mongoClient.connect(mongoURL, (error, client) => {
+        mongoClient.connect(mongoURL, { useNewUrlParser: true, useUnifiedTopology: true }, (error, client) => {
             if(error) {
+                failCount += 1;
+                if(failCount >= 3) {
+                    console.error('Failed to connect to MongoDB 3 times, exiting...');
+                    process.exit(1);
+                }
                 reject(error);
             } else {
+                failCount = 0; // Reset the counter on a successful connection
                 db = client.db('catalogue');
                 collection = db.collection('products');
                 resolve('connected');
@@ -180,6 +203,7 @@ function mongoConnect() {
         });
     });
 }
+
 
 // mongodb connection retry loop
 function mongoLoop() {
