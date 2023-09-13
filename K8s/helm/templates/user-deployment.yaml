@@ -53,6 +53,9 @@ spec:
             - sh
             - -c
             - 'curl http://localhost:8080/health | grep -q true'
+          initialDelaySeconds: 15
+          periodSeconds: 30
+          failureThreshold: 3
       restartPolicy: Always
       {{- with .Values.user.affinity }}
       affinity:
