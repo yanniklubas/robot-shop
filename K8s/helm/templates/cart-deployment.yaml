@@ -31,11 +31,11 @@ spec:
         - containerPort: 8080
         resources:
           limits:
-            cpu: 100m
+            cpu: 100M
             memory: 100Mi
           requests:
             cpu: 50m
-            memory: 50Mi
+            memory: 80Mi
         livenessProbe:
           exec:
             command:
