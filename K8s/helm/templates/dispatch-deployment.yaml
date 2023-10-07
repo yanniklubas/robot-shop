@@ -39,8 +39,8 @@ spec:
             cpu: 50m
             memory: 100Mi
           requests:
-            cpu: 20m
-            memory: 50Mi
+            cpu: 50m
+            memory: 100Mi
         readinessProbe:
           httpGet:
             path: /mqready 

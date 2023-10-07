@@ -29,11 +29,11 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         resources:
           limits:
-            cpu: 600m
+            cpu: 500m
             memory: 1024Mi
           requests:
             cpu: 500m
-            memory: 600Mi
+            memory: 1024Mi
       {{- if .Values.secret }}
       {{- if .Values.secret.enabled }}
       imagePullSecrets:

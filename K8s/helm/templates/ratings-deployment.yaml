@@ -39,8 +39,8 @@ spec:
             cpu: 800m
             memory: 600Mi
           requests:
-            cpu: 600m
-            memory: 300Mi
+            cpu: 800m
+            memory: 600Mi
         readinessProbe:
           httpGet:
             path: /_health

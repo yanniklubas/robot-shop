@@ -49,8 +49,8 @@ spec:
             cpu: 200m
             memory: 100Mi
           requests:
-            cpu: 100m
-            memory: 70Mi
+            cpu: 200m
+            memory: 100Mi
       restartPolicy: Always
       {{- with .Values.payment.affinity }}
       affinity:
