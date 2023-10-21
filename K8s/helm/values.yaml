@@ -1,9 +1,9 @@
 # Registry and repository for Docker images
 # Default is docker/robotshop/image:latest
 image:
-  repo: robotshop
-  version: latest
-  pullPolicy: IfNotPresent
+  repo: saurabhjha1
+  version: 2.1.0-kubespray
+  pullPolicy: Always
 
 # EUM configuration
 # Provide your key and set the endpoint
@@ -61,4 +61,8 @@ shipping: {}
 
 user: {}
 
-web: {}
+instana:
+  agent:
+    # {instan-svc}.{namespace}
+    host: instana-agent.instana-agent
+    port: 42699

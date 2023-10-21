@@ -48,6 +48,8 @@ class UserBehavior(HttpUser):
 
     @task
     def load(self):
+        if os.environ.get('TRANSACTION_LOAD') == '0':
+            return
         fake_ip = random.choice(self.fake_ip_addresses)
 
         self.client.get('/', headers={'x-forwarded-for': fake_ip})

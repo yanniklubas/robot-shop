@@ -1,3 +1,4 @@
+# Source: robot-shop/templates/load-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -26,9 +27,9 @@ spec:
           - name: ERROR
             value: "0"
           - name: TRANSACTION_LOAD
-            value: "1"
-        image: {{ .Values.image.repo }}/rs-load:{{ .Values.image.version }}
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+            value: "0"
+        image: saurabhjha1/rs-load:2.1.0-kubespray
+        imagePullPolicy: Always
         resources:
           limits:
             cpu: 500m
@@ -36,9 +37,3 @@ spec:
           requests:
             cpu: 500m
             memory: 1024Mi
-      {{- if .Values.secret }}
-      {{- if .Values.secret.enabled }}
-      imagePullSecrets:
-      - name: {{ .Values.secret.name }}
-      {{- end }}
-      {{- end }}

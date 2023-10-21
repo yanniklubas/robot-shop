@@ -42,4 +42,3 @@ then
 else
     locust -f robot-shop.py --host "$HOST" --headless -r 1 -u $NUM_CLIENTS $TIME
 fi
-
