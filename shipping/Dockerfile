@@ -1,7 +1,7 @@
 #
 # Build
 #
-FROM debian:10 AS build
+FROM debian:12 AS build
 
 RUN apt-get update && apt-get -y install maven
 
@@ -9,13 +9,14 @@ WORKDIR /opt/shipping
 
 COPY pom.xml /opt/shipping/
 RUN mvn dependency:resolve
+
 COPY src /opt/shipping/src/
 RUN mvn package
 
 #
 # Run
 #
-FROM openjdk:8-jdk
+FROM openjdk:17-jdk
 
 EXPOSE 8080
 

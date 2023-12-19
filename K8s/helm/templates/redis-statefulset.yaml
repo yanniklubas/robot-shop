@@ -20,7 +20,7 @@ spec:
       {{ end }}
       containers:
       - name: redis
-        image: redis:4.0.6
+        image: redis:4
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: 6379
