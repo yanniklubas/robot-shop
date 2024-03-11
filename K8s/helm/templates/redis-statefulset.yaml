@@ -28,13 +28,18 @@ spec:
           - name: data
             mountPath: /mnt/redis
         resources:
+          {{ if .Values.databases.applyResourceLimits }}
           limits:
             cpu: 200m
             memory: 100Mi
+          {{ end }}
           requests:
             cpu: 200m
             memory: 100Mi
       restartPolicy: Always
+      {{ if .Values.rootOnlyFilesystem }}
+      securityContext: {}
+      {{ end }}
       {{- with .Values.redis.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

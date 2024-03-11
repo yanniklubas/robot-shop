@@ -28,9 +28,11 @@ spec:
         ports:
         - containerPort: 3306
         resources:
+          {{ if .Values.databases.applyResourceLimits }}
           limits:
             cpu: 300m
             memory: 1400Mi
+          {{ end }}
           requests:
             cpu: 300m
             memory: 1400Mi

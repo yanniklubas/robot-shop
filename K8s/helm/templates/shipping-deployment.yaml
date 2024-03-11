@@ -32,13 +32,20 @@ spec:
       - name: shipping
         image: {{ .Values.image.repo }}/rs-shipping:{{ .Values.image.version }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        # Configure memory allocation in case of heap space failures
+        command:
+        - "java"
+        - "-XX:InitialRAMPercentage=33"
+        - "-XX:MaxRAMPercentage=75"
+        - "-jar"
+        - "shipping.jar"
         ports:
         - containerPort: 8080
         # it's Java it needs lots of memory
         resources:
           limits:
             cpu: 1000m
-            memory: 1024Mi
+            memory: 4Gi
           requests:
             cpu: 1000m
             memory: 1024Mi
