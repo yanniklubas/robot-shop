@@ -87,6 +87,16 @@ metadata:
     service: rabbitmq
 spec:
   replicas: 1
+  {{ if .Values.rootOnlyFilesystem }}
+  override:
+    statefulSet:
+      spec:
+      template:
+          spec:
+            containers: []
+            initContainers: []
+            securityContext: {}
+  {{ end }}
   resources:
     limits:
       cpu: 500m
