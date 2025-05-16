@@ -10,7 +10,7 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   local:
-    path: /data/robot-standard
+    path: /home/REPLACE_USER/robot-standard
   nodeAffinity:
     required:
       nodeSelectorTerms:
