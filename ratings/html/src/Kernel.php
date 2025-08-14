@@ -66,7 +66,7 @@ class Kernel extends BaseKernel implements EventSubscriberInterface
             'handlers' => [
                 'stdout' => [
                     'type' => 'stream',
-                    'level' => 'info',
+                    'level' => 'warning',
                     'path' => 'php://stdout',
                     'channels' => ['!request'],
                 ],

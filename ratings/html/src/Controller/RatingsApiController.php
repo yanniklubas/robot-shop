@@ -50,7 +50,11 @@ class RatingsApiController implements LoggerAwareInterface
                 throw new NotFoundHttpException("$sku not found");
             }
         } catch (\Exception $e) {
-            throw new HttpException(500, $e->getMessage(), $e);
+            $this->logger->error('Catalogue check failed: ' . $e->getMessage(), [
+                'sku' => $sku,
+                'exception' => $e->getMessage()
+            ]);
+            throw new HttpException(503, $e->getMessage(), $e);
         }
 
         try {
@@ -68,7 +72,7 @@ class RatingsApiController implements LoggerAwareInterface
                 'success' => true,
             ]);
         } catch (\Exception $e) {
-            throw new HttpException(500, 'Unable to update rating', $e);
+            throw new HttpException(501, 'Unable to update rating', $e);
         }
     }
 
