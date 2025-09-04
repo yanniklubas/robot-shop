@@ -90,25 +90,25 @@ spec:
   override:
     statefulSet:
       spec:
-      template:
-        spec:
-          {{ if .Values.rootOnlyFilesystem }}
-          containers: []
-          initContainers: []
-          securityContext: {}
-          {{ end }}
-          {{- with .Values.rabbitmq.affinity }}
-          affinity:
-            {{- toYaml . | nindent 14 }}
-          {{- end }}
-          {{- with .Values.rabbitmq.nodeSelector }}
-          nodeSelector:
-            {{- toYaml . | nindent 14 }}
-          {{- end }}
-          {{- with .Values.rabbitmq.tolerations }}
-          tolerations:
-            {{- toYaml . | nindent 14 }}
-          {{- end }}
+        template:
+          spec:
+            {{ if .Values.rootOnlyFilesystem }}
+            containers: []
+            initContainers: []
+            securityContext: {}
+            {{ end }}
+            {{- with .Values.rabbitmq.affinity }}
+            affinity:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- with .Values.rabbitmq.nodeSelector }}
+            nodeSelector:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- with .Values.rabbitmq.tolerations }}
+            tolerations:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
   resources:
     limits:
       cpu: 500m
