@@ -4,6 +4,9 @@ metadata:
   name: web
   labels:
     service: web
+    {{ if .Values.webRegion }}
+    region: {{ .Values.webRegion }}
+    {{ end }}
 spec:
   ports:
   - name: http
