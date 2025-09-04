@@ -11,3 +11,8 @@ spec:
     targetPort: 3306
   selector:
     service: mysql
+    {{ if .Values.topologyAwareServices }}
+    topologyKeys:
+    - "topology.kubernetes.io/region"
+    - "*"
+    {{ end }}

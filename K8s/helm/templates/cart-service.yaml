@@ -9,3 +9,8 @@ spec:
     targetPort: 8080
   selector:
     service: cart
+    {{ if .Values.topologyAwareServices }}
+    topologyKeys:
+    - "topology.kubernetes.io/region"
+    - "*"
+    {{ end }}

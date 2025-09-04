@@ -11,3 +11,8 @@ spec:
     targetPort: 6379
   selector:
     service: redis
+    {{ if .Values.topologyAwareServices }}
+    topologyKeys:
+    - "topology.kubernetes.io/region"
+    - "*"
+    {{ end }}

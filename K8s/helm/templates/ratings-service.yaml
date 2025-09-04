@@ -11,4 +11,8 @@ spec:
     targetPort: 80
   selector:
     service: ratings
-
+    {{ if .Values.topologyAwareServices }}
+    topologyKeys:
+    - "topology.kubernetes.io/region"
+    - "*"
+    {{ end }}

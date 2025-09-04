@@ -17,26 +17,30 @@
 #     targetPort: 4369
 #   selector:
 #     service: rabbitmq
-
 apiVersion: v1
 kind: Service
 metadata:
   name: rabbitmq
   labels:
     service: rabbitmq
-    # app.kubernetes.io/managed-by: Helm 
+    # app.kubernetes.io/managed-by: Helm
 spec:
   ports:
-  - name: tcp-amqp
-    port: 5672
-    targetPort: 5672
-  - name: http-management
-    port: 15672
-    targetPort: 15672
-  - name: tcp-epmd
-    port: 4369
-    targetPort: 4369
+    - name: tcp-amqp
+      port: 5672
+      targetPort: 5672
+    - name: http-management
+      port: 15672
+      targetPort: 15672
+    - name: tcp-epmd
+      port: 4369
+      targetPort: 4369
   selector:
     service: rabbitmq
     # app.kubernetes.io/name: rabbitmq
     # rabbitmqcluster.rabbitmq.com/name: rabbitmq
+    {{ if .Values.topologyAwareServices }}
+    topologyKeys:
+    - "topology.kubernetes.io/region"
+    - "*"
+    {{ end }}

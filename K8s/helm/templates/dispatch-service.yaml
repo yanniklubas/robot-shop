@@ -17,3 +17,8 @@ spec:
     targetPort: 8080
   selector:
     service: dispatch
+    {{ if .Values.topologyAwareServices }}
+    topologyKeys:
+    - "topology.kubernetes.io/region"
+    - "*"
+    {{ end }}

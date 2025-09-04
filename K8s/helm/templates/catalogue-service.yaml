@@ -11,3 +11,8 @@ spec:
     targetPort: 8080
   selector:
     service: catalogue
+    {{ if .Values.topologyAwareServices }}
+    topologyKeys:
+    - "topology.kubernetes.io/region"
+    - "*"
+    {{ end }}

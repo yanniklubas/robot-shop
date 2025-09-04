@@ -11,6 +11,11 @@ spec:
     targetPort: 8080
   selector:
     service: web
+    {{ if .Values.topologyAwareServices }}
+    topologyKeys:
+    - "topology.kubernetes.io/region"
+    - "*"
+    {{ end }}
   {{ if .Values.nodeport }}
   type: NodePort
   {{ else }}

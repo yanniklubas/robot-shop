@@ -11,3 +11,8 @@ spec:
     targetPort: 27017
   selector:
     service: mongodb
+    {{ if .Values.topologyAwareServices }}
+    topologyKeys:
+    - "topology.kubernetes.io/region"
+    - "*"
+    {{ end }}
