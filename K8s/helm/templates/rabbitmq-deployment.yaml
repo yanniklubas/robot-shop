@@ -97,6 +97,23 @@ spec:
             initContainers: []
             securityContext: {}
   {{ end }}
+  override:
+    statefulSet:
+      spec:
+        template:
+          spec:
+            {{- with .Values.rabbitmq.affinity }}
+            affinity:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- with .Values.rabbitmq.nodeSelector }}
+            nodeSelector:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- with .Values.rabbitmq.tolerations }}
+            tolerations:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
   resources:
     limits:
       cpu: 500m
