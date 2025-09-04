@@ -99,15 +99,15 @@ spec:
             {{ end }}
             {{- with .Values.rabbitmq.affinity }}
             affinity:
-              {{- toYaml . | nindent 12 }}
+              {{- toYaml . | nindent 14 }}
             {{- end }}
             {{- with .Values.rabbitmq.nodeSelector }}
             nodeSelector:
-              {{- toYaml . | nindent 12 }}
+              {{- toYaml . | nindent 14 }}
             {{- end }}
             {{- with .Values.rabbitmq.tolerations }}
             tolerations:
-              {{- toYaml . | nindent 12 }}
+              {{- toYaml . | nindent 14 }}
             {{- end }}
   resources:
     limits:
