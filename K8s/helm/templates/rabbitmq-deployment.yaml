@@ -87,21 +87,16 @@ metadata:
     service: rabbitmq
 spec:
   replicas: {{ default 1 .Values.defaultReplicas }}
-  {{ if .Values.rootOnlyFilesystem }}
-  override:
-    statefulSet:
-      spec:
-      template:
-          spec:
-            containers: []
-            initContainers: []
-            securityContext: {}
-  {{ end }}
   override:
     statefulSet:
       spec:
         template:
           spec:
+            {{ if .Values.rootOnlyFilesystem }}
+            containers: []
+            initContainers: []
+            securityContext: {}
+            {{ end }}
             {{- with .Values.rabbitmq.affinity }}
             affinity:
               {{- toYaml . | nindent 14 }}
