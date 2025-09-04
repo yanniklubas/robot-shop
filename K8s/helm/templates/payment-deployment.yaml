@@ -6,7 +6,7 @@ metadata:
     service: payment
     stage: prod
 spec:
-  replicas: 1
+  replicas: {{ default 1 .Values.defaultReplicas }}
   selector:
     matchLabels:
       service: payment
@@ -27,7 +27,7 @@ spec:
           - 'sh'
           - '-c'
           - 'until nc -z dispatch 8080; do echo waiting for dispatch; sleep 2; done' # Replace with the correct hostname and port if different
-      
+
       containers:
       - name: payment
         image: {{ .Values.image.repo }}/rs-payment:{{ .Values.image.version }}

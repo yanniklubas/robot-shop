@@ -5,7 +5,7 @@ metadata:
   labels:
     service: dispatch
 spec:
-  replicas: 1
+  replicas: {{ default 1 .Value.defaultReplicas }}
   selector:
     matchLabels:
       service: dispatch
@@ -43,16 +43,16 @@ spec:
             memory: 100Mi
         readinessProbe:
           httpGet:
-            path: /mqready 
-            port: 8080 
+            path: /mqready
+            port: 8080
           initialDelaySeconds: 30
           periodSeconds: 10
           successThreshold: 1
           failureThreshold: 3
         livenessProbe:
           httpGet:
-            path: /mqready 
-            port: 8080 
+            path: /mqready
+            port: 8080
           initialDelaySeconds: 60
           periodSeconds: 30
           successThreshold: 1
