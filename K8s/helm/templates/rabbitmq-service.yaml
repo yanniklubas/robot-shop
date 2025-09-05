@@ -24,6 +24,10 @@ metadata:
   labels:
     service: rabbitmq
     # app.kubernetes.io/managed-by: Helm
+  {{- if .Values.topologyAwareServices }}
+  annotations:
+    service.kubernetes.io/topology-mode: "Auto"
+  {{- end }}
 spec:
   ports:
     - name: tcp-amqp
@@ -39,8 +43,3 @@ spec:
     service: rabbitmq
     # app.kubernetes.io/name: rabbitmq
     # rabbitmqcluster.rabbitmq.com/name: rabbitmq
-    {{ if .Values.topologyAwareServices }}
-    topologyKeys:
-    - "topology.kubernetes.io/region"
-    - "*"
-    {{ end }}

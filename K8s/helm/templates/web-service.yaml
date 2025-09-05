@@ -7,6 +7,10 @@ metadata:
     {{ if .Values.webRegion }}
     region: {{ .Values.webRegion }}
     {{ end }}
+  {{- if .Values.topologyAwareServices }}
+  annotations:
+    service.kubernetes.io/topology-mode: "Auto"
+  {{- end }}
 spec:
   ports:
   - name: http
@@ -14,11 +18,6 @@ spec:
     targetPort: 8080
   selector:
     service: web
-    {{ if .Values.topologyAwareServices }}
-    topologyKeys:
-    - "topology.kubernetes.io/region"
-    - "*"
-    {{ end }}
   {{ if .Values.nodeport }}
   type: NodePort
   {{ else }}

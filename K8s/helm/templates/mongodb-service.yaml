@@ -4,6 +4,10 @@ metadata:
   labels:
     service: mongodb
   name: mongodb
+  {{- if .Values.topologyAwareServices }}
+  annotations:
+    service.kubernetes.io/topology-mode: "Auto"
+  {{- end }}
 spec:
   ports:
   - name: mongo
@@ -11,8 +15,3 @@ spec:
     targetPort: 27017
   selector:
     service: mongodb
-    {{ if .Values.topologyAwareServices }}
-    topologyKeys:
-    - "topology.kubernetes.io/region"
-    - "*"
-    {{ end }}

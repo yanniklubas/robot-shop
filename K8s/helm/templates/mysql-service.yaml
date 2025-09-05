@@ -4,6 +4,10 @@ metadata:
   labels:
     service: mysql
   name: mysql
+  {{- if .Values.topologyAwareServices }}
+  annotations:
+    service.kubernetes.io/topology-mode: "Auto"
+  {{- end }}
 spec:
   ports:
   - name: mysql
@@ -11,8 +15,3 @@ spec:
     targetPort: 3306
   selector:
     service: mysql
-    {{ if .Values.topologyAwareServices }}
-    topologyKeys:
-    - "topology.kubernetes.io/region"
-    - "*"
-    {{ end }}

@@ -4,6 +4,10 @@ metadata:
   name: shipping
   labels:
     service: shipping
+  {{- if .Values.topologyAwareServices }}
+  annotations:
+    service.kubernetes.io/topology-mode: "Auto"
+  {{- end }}
 spec:
   ports:
   - name: http
@@ -11,8 +15,3 @@ spec:
     targetPort: 8080
   selector:
     service: shipping
-    {{ if .Values.topologyAwareServices }}
-    topologyKeys:
-    - "topology.kubernetes.io/region"
-    - "*"
-    {{ end }}

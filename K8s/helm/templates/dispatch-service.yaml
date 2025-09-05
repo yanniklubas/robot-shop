@@ -6,6 +6,10 @@ metadata:
   name: dispatch
   labels:
     service: dispatch
+  {{- if .Values.topologyAwareServices }}
+  annotations:
+    service.kubernetes.io/topology-mode: "Auto"
+  {{- end }}
 spec:
   clusterIP: None
   ports:
@@ -17,8 +21,3 @@ spec:
     targetPort: 8080
   selector:
     service: dispatch
-    {{ if .Values.topologyAwareServices }}
-    topologyKeys:
-    - "topology.kubernetes.io/region"
-    - "*"
-    {{ end }}
