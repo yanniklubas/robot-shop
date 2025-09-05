@@ -19,7 +19,7 @@ metadata:
   labels:
     service: rabbitmq
 spec:
-  replicas: {{ default 1 .Values.defaultReplicas }}
+  replicas: {{ default 1 .Values.rabbitmqReplicas }}
   {{- with .Values.rabbitmq.affinity }}
   affinity:
     {{- toYaml . | nindent 4 }}
