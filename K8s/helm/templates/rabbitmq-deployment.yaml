@@ -33,6 +33,8 @@ spec:
             containers: []
             initContainers: []
             securityContext: {}
+            {{- else }}
+            containers: []
             {{- end }}
             {{- with .Values.rabbitmq.nodeSelector }}
             nodeSelector:
