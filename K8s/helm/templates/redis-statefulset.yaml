@@ -5,7 +5,7 @@ metadata:
     service: redis
   name: redis
 spec:
-  replicas: {{ default 1 .Values.defaultReplicas }}
+  replicas: {{ default 1 .Values.redisReplicas }}
   selector:
     matchLabels:
       service: redis
