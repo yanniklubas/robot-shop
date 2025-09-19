@@ -418,9 +418,9 @@ class CircuitBreaker {
 			return false;
 		}
 
-		// In HALF_OPEN, only allow one request
+		// In HALF_OPEN, only allow maxConcurrent requests
 		if (this.state === "HALF_OPEN") {
-			return this.activeRequests === 0;
+			return this.activeRequests <= this.maxConcurrent;
 		}
 
 		return true;
