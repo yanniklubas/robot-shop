@@ -1,12 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: web
+  name: web-southamerica
   labels:
     service: web
-    {{ if .Values.webRegion }}
-    region: {{ .Values.webRegion }}
-    {{ end }}
+    region: southamerica
   {{- if .Values.topologyAwareServices }}
   annotations:
     service.kubernetes.io/topology-mode: "Auto"
@@ -18,6 +16,7 @@ spec:
     targetPort: 8080
   selector:
     service: web
+    region: southamerica
   {{ if .Values.nodeport }}
   type: NodePort
   {{ else }}

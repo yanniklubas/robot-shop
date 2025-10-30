@@ -1,18 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web
+  name: web-eu
   labels:
     service: web
+    region: eu
 spec:
-  replicas: {{ default 1 .Values.defaultReplicas }}
+  replicas: 1
   selector:
     matchLabels:
       service: web
+      region: eu
   template:
     metadata:
       labels:
         service: web
+        region: eu
     spec:
       {{ if .Values.psp.enabled }}
       serviceAccountName: robot-shop
@@ -63,10 +66,9 @@ spec:
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.web.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        node-role: web
+        region: eu
       {{- with .Values.web.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
