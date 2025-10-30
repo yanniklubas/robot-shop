@@ -68,7 +68,7 @@ spec:
       {{- end }}
       nodeSelector:
         node-role: web
-        region: us
+        topology.kubernetes.io/region: us
       {{- with .Values.web.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}

@@ -68,7 +68,7 @@ spec:
       {{- end }}
       nodeSelector:
         node-role: web
-        region: southamerica
+        topology.kubernetes.io/region: southamerica
       {{- with .Values.web.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
