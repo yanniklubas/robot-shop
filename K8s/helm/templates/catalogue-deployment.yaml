@@ -54,6 +54,7 @@ spec:
             - 'curl http://localhost:8080/health | grep -q true'
           initialDelaySeconds: 15
           periodSeconds: 10
+          timeoutSeconds: 5
           failureThreshold: 3
       restartPolicy: Always
       {{- with .Values.catalogue.affinity }}
