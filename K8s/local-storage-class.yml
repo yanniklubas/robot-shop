@@ -4,5 +4,7 @@ metadata:
   name: local-storage
   annotations:
     storageclass.kubernetes.io/is-default-class: "true"
-provisioner: kubernetes.io/no-provisioner
+provisioner: pd.csi.storage.gke.io
+parameters:
+  type: pd-standard
 volumeBindingMode: WaitForFirstConsumer
