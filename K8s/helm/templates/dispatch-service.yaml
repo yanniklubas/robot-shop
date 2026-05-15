@@ -6,11 +6,10 @@ metadata:
   name: dispatch
   labels:
     service: dispatch
-  {{- if .Values.topologyAwareServices }}
-  annotations:
-    service.kubernetes.io/topology-mode: "Auto"
-  {{- end }}
 spec:
+  {{- if .Values.topologyAwareServices }}
+  trafficDistribution: PreferClose
+  {{- end }}
   clusterIP: None
   ports:
   - name: headless

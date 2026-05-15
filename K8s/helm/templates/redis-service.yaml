@@ -4,11 +4,10 @@ metadata:
   labels:
     service: redis
   name: redis
-  {{- if .Values.topologyAwareServices }}
-  annotations:
-    service.kubernetes.io/topology-mode: "Auto"
-  {{- end }}
 spec:
+  {{- if .Values.topologyAwareServices }}
+  trafficDistribution: PreferClose
+  {{- end }}
   ports:
   - name: redis
     port: 6379

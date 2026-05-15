@@ -4,11 +4,10 @@ metadata:
   name: user
   labels:
     service: user
-  {{- if .Values.topologyAwareServices }}
-  annotations:
-    service.kubernetes.io/topology-mode: "Auto"
-  {{- end }}
 spec:
+  {{- if .Values.topologyAwareServices }}
+  trafficDistribution: PreferClose
+  {{- end }}
   ports:
   - name: http
     port: 8080

@@ -24,11 +24,10 @@ metadata:
   labels:
     service: rabbitmq
     # app.kubernetes.io/managed-by: Helm
-  {{- if .Values.topologyAwareServices }}
-  annotations:
-    service.kubernetes.io/topology-mode: "Auto"
-  {{- end }}
 spec:
+  {{- if .Values.topologyAwareServices }}
+  trafficDistribution: PreferClose
+  {{- end }}
   ports:
     - name: tcp-amqp
       port: 5672
