@@ -29,6 +29,7 @@ spec:
       spec:
         template:
           spec:
+            schedulerName: kube
             {{- if .Values.rootOnlyFilesystem }}
             containers: []
             initContainers: []

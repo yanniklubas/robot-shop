@@ -14,6 +14,7 @@ spec:
       labels:
         service: mongodb
     spec:
+      schedulerName: kube
       {{ if .Values.psp.enabled }}
       serviceAccountName: robot-shop
       {{ end }}

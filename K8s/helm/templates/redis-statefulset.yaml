@@ -15,6 +15,7 @@ spec:
       labels:
         service: redis
     spec:
+      schedulerName: kube
       {{ if .Values.psp.enabled }}
       serviceAccountName: robot-shop
       {{ end }}
